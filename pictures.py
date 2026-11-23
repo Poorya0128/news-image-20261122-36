@@ -357,9 +357,9 @@ def pic_seoul(d, x0, y0, x1, y1):
         x = cx - 9 + 9 * k
         _line(d, [(x, cy - 15), (x, cy - 11)], (40, 50, 72), 1.6)
         _line(d, [(x, cy + 11), (x, cy + 15)], (40, 50, 72), 1.6)
-    _txt(d, "ai", "AI", cx, cy, "sans_b", 11, (120, 200, 255), "mm")
-    # Red slash across the chip
+    # Red slash across the chip, then "AI" on top so it stays readable.
     _line(d, [(cx - 20, cy + 14), (cx + 20, cy - 14)], RED, 2.8)
+    _txt(d, "ai", "AI", cx, cy, "sans_b", 11, (120, 200, 255), "mm")
 
 
 # -------------------------------------------------------------- card 12

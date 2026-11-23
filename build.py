@@ -1,5 +1,5 @@
 # build.py — assembles "The World in One Day", Sunday 22 November 2026.
-# One-page newspaper, 36 stories, 1024x1024. Draws at 2x (2048x2048)
+# One-page newspaper, 35 stories, 1024x1024. Draws at 2x (2048x2048)
 # with Pillow, downscales once with LANCZOS, quantizes to 256 colours,
 # saves entry.png next to this file. Deterministic: no randomness,
 # no clock, no network, fixed fonts/data. Layout from spec section 4;
@@ -57,7 +57,7 @@ def main():
            "THE WORLD IN ONE DAY · CLOSING EDITION",
            "cond_b", 12.5, data.RED, anchor="la")
     H.text(d, "kicker_r", 1012, 4,
-           "%d STORIES · 6 REGIONS · TIMES IN UTC" % data.N,
+           "%d STORIES · 6 REGIONS · 6 TOPICS · TIMES IN UTC" % data.N,
            "cond_b", 12.5, data.INK, anchor="ra")
 
     # -------------------------------------------------------- masthead (y=17)
@@ -72,58 +72,106 @@ def main():
     H.text(d, "deck", 512, 104, data.DECK, "serif_i", 17, data.RED,
            anchor="ma")
 
-    # ---------------------------------------------------- background bar (y=125)
-    H.rect(d, 12, 125, 1012, 142, fill=(234, 230, 220))
-    H.text(d, "bg_label", 18, 125 + 3, "BACKGROUND", "cond_b", 11.5,
+    # ---------------------------------------------- coverage strip (y=124)
+    H.rect(d, 12, 124, 1012, 143, fill=data.WHITE, outline=data.NAVY,
+           width=1)
+    cov_x = 18
+    H.text(d, "cov_label", cov_x, 126.8, "COVERAGE", "cond_b", 11.6,
+           data.NAVY, anchor="la")
+    cov_x += H.text_w("cond_b", 11.6, "COVERAGE") + 10
+    region_totals = data.region_totals()
+    for region in data.REGIONS:
+        H.ellipse(d, cov_x, 129, cov_x + 9, 138,
+                  fill=data.REG[region])
+        label = "%s %d" % (data.REGION_NAMES[region],
+                           region_totals[region])
+        H.text(d, "cov_region_" + region, cov_x + 12, 126.8, label,
+               "cond_b", 11.6, data.INK, anchor="la")
+        cov_x += 12 + H.text_w("cond_b", 11.6, label) + 10
+    rule_x = cov_x - 3
+    H.line(d, [(rule_x, 128), (rule_x, 139)], fill=data.RULE, width=1)
+    cov_x = rule_x + 6
+    topic_totals = data.topic_totals()
+    topic_order = ["CONFLICT", "POLITICS", "ECONOMY", "DISASTER",
+                   "SOCIETY", "SPORT"]
+    topic_parts = ["%s %d" % (t.capitalize(), topic_totals.get(t, 0))
+                   for t in topic_order if topic_totals.get(t, 0)]
+    topic_text = "  ·  ".join(topic_parts)
+    H.text(d, "cov_topics", cov_x, 126.8, topic_text, "cond", 11.6,
+           data.INK, anchor="la")
+    cov_end = cov_x + H.text_w("cond", 11.6, topic_text)
+    print("coverage strip ends at x=%.1f (must be <= 1006)" % cov_end)
+    assert cov_end <= 1006, "coverage strip too wide: %.1f" % cov_end
+
+    # ---------------------------------------------------- background bar (y=146)
+    H.rect(d, 12, 146, 1012, 163, fill=(234, 230, 220))
+    H.text(d, "bg_label", 18, 146 + 3, "BACKGROUND", "cond_b", 11.5,
            data.NAVY, anchor="la")
     bg_x = 18 + H.text_w("cond_b", 11.5, "BACKGROUND") + 6
-    H.text(d, "bg_text", bg_x, 125 + 3, data.BACKGROUND, "cond", 11.5,
+    H.text(d, "bg_text", bg_x, 146 + 3, data.BACKGROUND, "cond", 11.5,
            data.INK, anchor="la")
 
-    # --------------------------------------------------------- timeline (y=147)
-    H.rect(d, 12, 147, 76, 183, fill=data.RED)
-    H.text(d, "tl_box_day", 44, 147 + 5, "THE DAY", "cond_b", 11.5,
+    # --------------------------------------------------------- timeline (y=168)
+    H.rect(d, 12, 168, 76, 204, fill=data.RED)
+    H.text(d, "tl_box_day", 44, 168 + 5, "THE DAY", "cond_b", 11.5,
            data.WHITE, anchor="ma")
-    H.text(d, "tl_box_utc", 44, 147 + 19, "IN UTC", "cond_b", 11.5,
+    H.text(d, "tl_box_utc", 44, 168 + 19, "IN UTC", "cond_b", 11.5,
            data.WHITE, anchor="ma")
     for i, (time_s, qual, event) in enumerate(data.TIMELINE):
         col_x = 84 + 116 * i
         if i > 0:
             sep_x = col_x - 5
-            H.line(d, [(sep_x, 147), (sep_x, 147 + 40)], fill=data.RULE,
+            H.line(d, [(sep_x, 168), (sep_x, 168 + 40)], fill=data.RULE,
                    width=1)
-        H.text(d, "tl_time_%d" % i, col_x, 147 + 1, time_s, "serif_b", 17,
+        H.text(d, "tl_time_%d" % i, col_x, 168 + 1, time_s, "serif_b", 17,
                data.RED, anchor="la")
         if qual:
             qx = col_x + H.text_w("serif_b", 17, time_s) + 4
-            H.text(d, "tl_qual_%d" % i, qx, 147 + 6, qual, "cond", 10.6,
+            H.text(d, "tl_qual_%d" % i, qx, 168 + 6, qual, "cond", 10.6,
                    data.GREY, anchor="la")
         ev_w = H.text_w("cond_b", 11.2, event)
         assert ev_w <= 108, "timeline event too wide: %r %.1f" % (event, ev_w)
-        H.text(d, "tl_event_%d" % i, col_x, 147 + 21, event, "cond_b",
+        H.text(d, "tl_event_%d" % i, col_x, 168 + 21, event, "cond_b",
                11.2, data.INK, anchor="la")
-    H.rect(d, 12, 147 + 40, 1012, 147 + 40 + 0.9, fill=data.INK)
+    H.rect(d, 12, 168 + 40, 1012, 168 + 40 + 0.9, fill=data.INK)
 
-    # ------------------------------------------------------------ leads (y=192)
+    # ------------------------------------------------------------ leads (y=213)
+    leads_y = 213
+    lead_pic_h = 96
     lead_xs = [12, 350, 688]
     col_bottoms = []
     for story, x in zip(data.LEADS, lead_xs):
         n = story["n"]
-        H.panel(d, img, PICTURES[story["picture"]], x, 192, x + 324,
-                192 + 118, story["place_bar"], story["label"], 17, 10.5,
-                sources=None)
-        H.badge(d, x + 9, 315 + 8, n, REG[story["region"]], 9, 11)
+        H.panel(d, img, PICTURES[story["picture"]], x, leads_y, x + 324,
+                leads_y + lead_pic_h, story["place_bar"], story["label"],
+                17, 10.5, sources=None)
+        kicker_y = leads_y + lead_pic_h + 5
+        H.badge(d, x + 9, kicker_y + 8, n, REG[story["region"]], 9, 11)
         kicker = "%s · %s" % (story["region"], story["field"])
-        H.text(d, "lead_kicker_%d" % n, x + 22, 315, kicker, "cond_b", 11,
-               REG[story["region"]], anchor="la")
-        H.tag_chip(d, story["tag"], story["tag_extra"], x + 324, 315)
-        y = 336
+        H.text(d, "lead_kicker_%d" % n, x + 22, kicker_y, kicker,
+               "cond_b", 11, REG[story["region"]], anchor="la")
+        H.tag_chip(d, story["tag"], story["tag_extra"], x + 324, kicker_y)
+        y = kicker_y + 21
         lines, hh = H.wrap([(story["headline"], "serif_b", 24, data.INK)],
                            324, 25.4)
         y += H.draw_wrapped(d, "lead_head_%d" % n, lines, x, y, 25.4) + 4
         lines, hh = H.wrap([(story["body"], "serif", 13.4, data.INK)],
                            324, 15.2)
-        y += H.draw_wrapped(d, "lead_body_%d" % n, lines, x, y, 15.2) + 4
+        assert len(lines) == 2, \
+            "lead %d body not 2 lines: %d" % (n, len(lines))
+        y += H.draw_wrapped(d, "lead_body_%d" % n, lines, x, y, 15.2)
+        # "Why it matters" line, 3 px below the body's last line.
+        why_y = y + 3
+        H.rect(d, x, why_y - 1, x + 3, why_y + 13,
+               fill=REG[story["region"]])
+        why_runs = [("Why it matters:", "cond_b", 12,
+                     REG[story["region"]]),
+                    (story["why"], "cond_b", 12, data.INK)]
+        why_lines, why_h = H.wrap(why_runs, 324 - 8, 14)
+        assert len(why_lines) <= 2, \
+            "lead %d why over 2 lines: %d" % (n, len(why_lines))
+        H.draw_wrapped(d, "lead_why_%d" % n, why_lines, x + 8, why_y, 14)
+        y = why_y + why_h + 2
         bb = H.text(d, "lead_src_%d" % n, x, y, story["sources"],
                     "cond_b", 10.6, data.GREY, anchor="la")
         col_bottoms.append(bb[3] + 2)
@@ -136,7 +184,7 @@ def main():
     for idx, story in enumerate(data.CARDS):
         r, c = idx // 5, idx % 5
         x = 12 + c * (card_w + 12)
-        y = cards_y + r * 136.8
+        y = cards_y + r * 138.8
         n = story["n"]
         H.panel(d, img, PICTURES[story["picture"]], x, y, x + card_w,
                 y + 64, story["place_bar"], story["label"], 13, 9.6,
@@ -152,7 +200,7 @@ def main():
         if final_head != story["headline"]:
             print("card %d headline shortened to: %s" % (n, final_head))
         H.draw_wrapped(d, "card_head_%d" % n, lines, x, y + 83, 15.6)
-    cards_rule_y = cards_y + 136.8 + 136.8
+    cards_rule_y = cards_y + 138.8 + 138.8
     H.rect(d, 12, cards_rule_y, 1012, cards_rule_y + 1.4, fill=data.INK)
 
     # ------------------------------------------------------- map + list row
@@ -160,12 +208,33 @@ def main():
     H.text(d, "map_title", 12, row_y,
            "WHERE ALL %d STORIES HAPPENED" % data.N, "cond_b", 11.4,
            data.NAVY, anchor="la")
-    map_box = (12, row_y + 16, 312, row_y + 16 + 111.8)
+    map_box = (12, row_y + 16, 312, row_y + 16 + 102)
     land = map_draw.load_land(os.path.join(HERE, "world_land.json"))
     map_draw.draw_map(img, map_box, land, data.STORIES)
     map_key_bottom = map_draw.draw_map_key(
-        d, 12, row_y + 16 + 111.8 + 4, data.STORIES)
-    map_draw.draw_region_key(d, 12, map_key_bottom + 16)
+        d, 12, row_y + 16 + 102 + 4, data.STORIES)
+
+    # "What we don't know yet" box, left column under the map key.
+    dk_top = map_key_bottom + 2
+    dk_bottom = 967 - 5
+    H.rect(d, 12, dk_top, 312, dk_bottom, fill=(246, 243, 234),
+           outline=(176, 112, 8), width=1)
+    H.text(d, "dk_title", 18, dk_top + 2.5, "WHAT WE DON’T KNOW YET",
+           "cond_b", 11.4, (150, 92, 6), anchor="la")
+    dk_items = [
+        ("Merkury:", "who struck it; no one has claimed it"),
+        ("Chabahar:", "which forces; UKMTO did not say"),
+        ("Dymer:", "the final toll; people were still trapped"),
+        ("Ebola:", "WHO’s latest count is from 17 Nov"),
+    ]
+    dk_spacing = (dk_bottom - 3 - (dk_top + 16) - 11.4) / 3.0
+    for i, (lead, rest) in enumerate(dk_items):
+        ly = dk_top + 16 + i * dk_spacing
+        lead_w = H.text_w("cond_b", 11.4, lead)
+        H.text(d, "dk_lead_%d" % i, 18, ly, lead, "cond_b", 11.4,
+               data.INK, anchor="la")
+        H.text(d, "dk_text_%d" % i, 18 + lead_w + 4, ly, rest, "cond",
+               11.4, data.INK, anchor="la")
 
     # List (right).
     H.text(d, "list_head", 326, row_y,
@@ -176,11 +245,11 @@ def main():
            data.GREY, anchor="ra")
     H.line(d, [(669, row_y + 16), (669, 967 - 4)], fill=data.RULE, width=1)
     available = (967 - 4) - (row_y + 16)
-    row_h = available / 12.0
+    row_h = available / 11.0
     cols = [(326, 337), (675, 337)]
     for bi, story in enumerate(data.BRIEFS):
-        col_idx = 0 if bi < 12 else 1
-        row_i = bi if bi < 12 else bi - 12
+        col_idx = 0 if bi < 11 else 1
+        row_i = bi if bi < 11 else bi - 11
         col_x, col_w = cols[col_idx]
         row_top = row_y + 16 + row_i * row_h
         n = story["n"]
@@ -221,21 +290,26 @@ def main():
     dc_w = 1012 - (18 + label_w + 18) - 12
     dc_lines, dc_h = H.wrap(runs, dc_w, 13.6)
     print("date check lines: %d (width %.1f)" % (len(dc_lines), dc_w))
-    H.draw_wrapped(d, "datecheck", dc_lines, 18 + label_w + 18, 975, 13.6)
+    H.draw_wrapped(d, "datecheck", dc_lines, 18 + label_w + 18, 971, 13.6)
 
     # ------------------------------------------------------------ footer (y=1006)
-    H.text(d, "footer_howsure", 12, 1006, "HOW SURE", "cond_b", 12,
+    H.text(d, "footer_howsure", 12, 1006, "HOW SURE", "cond_b", 11.8,
            data.INK, anchor="la")
-    fx = 12 + H.text_w("cond_b", 12, "HOW SURE") + 12
+    fx = 12 + H.text_w("cond_b", 11.8, "HOW SURE") + 12
     for kind, definition in data.CERTAINTY_DEFS:
         H.certainty_icon(d, kind, fx + 7.5, 1013, 7.5)
-        H.text(d, "footer_def_" + kind, fx + 18, 1006, definition,
-               "cond", 12, data.INK, anchor="la")
-        fx += 18 + H.text_w("cond", 12, definition) + 9
+        kind_label = kind + ":"
+        H.text(d, "footer_kind_" + kind, fx + 18, 1006, kind_label,
+               "cond_b", 10, data.INK, anchor="la")
+        def_x = (fx + 18 + H.text_w("cond_b", 10, kind_label)
+                 + H.text_w("cond", 11.8, " "))
+        H.text(d, "footer_def_" + kind, def_x, 1006, definition,
+               "cond", 11.8, data.INK, anchor="la")
+        fx = def_x + H.text_w("cond", 11.8, definition) + 8
     H.text(d, "footer_drawings", 1012, 1006, "Drawings, not photos",
-           "cond", 12, data.GREY, anchor="ra")
+           "cond", 11.8, data.GREY, anchor="ra")
     print("footer legend ends at x=%.1f; drawings starts at %.1f"
-          % (fx, 1012 - H.text_w("cond", 12, "Drawings, not photos")))
+          % (fx, 1012 - H.text_w("cond", 11.8, "Drawings, not photos")))
 
     # ------------------------------------------------------- registry check
     problems = H.check_problems()

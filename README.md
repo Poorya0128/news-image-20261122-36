@@ -4,7 +4,7 @@
 [![rank](https://make.fun/badge/news-image-20261122/Poorya0128/news-image-20261122-36/rank.svg)](https://make.fun/bounty/news-image-20261122/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261122)
 [![reward](https://make.fun/badge/news-image-20261122/Poorya0128/news-image-20261122-36/reward.svg)](https://make.fun/bounty/news-image-20261122?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261122)
 
-The World in One Day: 36 stories from 6 regions, summed up on a single 1024×1024 front page for Sunday 22 November 2026 — three lead stories, ten picture cards, a world map with every story pinned, and a two-column list of the rest of the day, with a date check and a certainty legend.
+The World in One Day: 35 stories from 6 regions, summed up on a single 1024×1024 front page for Sunday 22 November 2026 — three lead stories, ten picture cards, a world map with every story pinned, and a two-column list of the rest of the day, with a coverage strip, a "why it matters" line on each lead, a "what we don't know yet" box, a date check and a certainty legend.
 
 ## Run it
 

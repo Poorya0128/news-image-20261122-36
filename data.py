@@ -1,7 +1,8 @@
 # data.py — pure data for "The World in One Day", Sunday 22 November 2026.
-# One-page newspaper, 36 stories, 1024x1024. Transcribed word-for-word from
-# the build spec (agent_spec_news-image-20261122.md, v8). Standard library
-# only; no Pillow, no imports at all. Every count is computed from STORIES.
+# One-page newspaper, 35 stories, 1024x1024. Transcribed word-for-word from
+# the build spec (agent_spec_news-image-20261122.md, v8, plus v9 change list).
+# Standard library only; no Pillow, no imports at all. Every count is
+# computed from STORIES.
 
 # ---------------------------------------------------------------- colours
 PAPER = (247, 244, 236)
@@ -79,14 +80,14 @@ FIELD_TOPICS = {
 # ---------------------------------------------------------------- stories
 # Keys: n, region, field, topic, place, place_bar, headline, body, what,
 # sources, tag, tag_extra, lon, lat, picture, label.
-# - headline: leads 1-3 and cards 4-13 use the spec headline; briefs 14-36
+# - headline: leads 1-3 and cards 4-13 use the spec headline; briefs 14-35
 #   use the "what happened" text as the headline too.
 # - body: leads 1-3 only (exact wording from spec 5.3); "" otherwise.
-# - what: briefs 14-36 (the "what happened" text); "" for leads/cards.
+# - what: briefs 14-35 (the "what happened" text); "" for leads/cards.
 # - place_bar: the place name shown in the picture bar (leads/cards); for
 #   briefs it is the same as place (no picture panel).
 # - lon/lat: leads/cards from spec 5.7; briefs from the Lon,Lat column in
-#   5.5; story 36 has none -> None, None.
+#   5.5; story 35 has none -> None, None.
 STORIES = [
     # ---- leads (1-3) ----
     {
@@ -94,9 +95,10 @@ STORIES = [
         "topic": FIELD_TOPICS["CLIMATE"],
         "place": "ANTALYA, TÜRKİYE", "place_bar": "ANTALYA, TÜRKİYE",
         "headline": "COP31 ends with no deal on fossil fuels",
-        "body": "Longest UN climate summit ever closes without a final text: "
-                "the EU and others reject a draft that never names fossil fuels. "
-                "Guterres: “deeply disappointing.”",
+        "body": "Longest UN climate summit on record ends with no final "
+                "text; the EU and others reject a draft silent on fossil fuels.",
+        "why": "Nearly 200 nations leave with no agreed step away from "
+               "fossil fuels.",
         "what": "",
         "sources": "UN News · Reuters · NPR",
         "tag": "CONFIRMED", "tag_extra": "",
@@ -107,12 +109,12 @@ STORIES = [
         "n": 2, "region": "EUROPE", "field": "UKRAINE WAR",
         "topic": FIELD_TOPICS["UKRAINE WAR"],
         "place": "DYMER, NORTH OF KYIV", "place_bar": "DYMER, NORTH OF KYIV",
-        "headline": "Russian drone strike flattens Kyiv-area block",
-        "body": "Overnight strike collapses a five-storey block in Dymer: "
-                "11 dead by night, a woman of 79 pulled out alive. "
-                "Kyiv says it stopped 161 of 186 drones.",
+        "headline": "Russia fires 186 drones at Ukraine; 11 dead near Kyiv",
+        "body": "A five-storey block in Dymer collapsed; a woman of 79 was "
+                "pulled out alive. 161 drones were downed or jammed.",
+        "why": "25 of 186 got through; one brought down a block of flats near the capital.",
         "what": "",
-        "sources": "Ukrainska Pravda · AP · Kyiv Post",
+        "sources": "Ukraine Air Force · Ukrainska Pravda · AP",
         "tag": "CONFIRMED", "tag_extra": "",
         "lon": 30.3, "lat": 50.9,
         "picture": "dymer", "label": "11 DEAD",
@@ -122,9 +124,9 @@ STORIES = [
         "topic": FIELD_TOPICS["NAVAL WAR"],
         "place": "BENGHAZI, LIBYA", "place_bar": "BENGHAZI, LIBYA",
         "headline": "Russian warship capsizes in a Libyan port",
-        "body": "Blasts around 01:00 UTC; by morning the Russian Navy corvette "
-                "Merkury lies capsized, bow above water. Libya suspects "
-                "Ukrainian sea drones; no one claims it.",
+        "body": "Blasts around 01:00 UTC; by morning the Russian corvette "
+                "Merkury lies capsized, bow up. No one has claimed it.",
+        "why": "A Russian Navy warship hit in a foreign port, far from Ukraine.",
         "what": "",
         "sources": "AP · BBC Verify · The Guardian",
         "tag": "UNVERIFIED", "tag_extra": "WHO STRUCK",
@@ -147,7 +149,7 @@ STORIES = [
         "n": 5, "region": "MIDDLE EAST", "field": "SHIPPING",
         "topic": FIELD_TOPICS["SHIPPING"],
         "place": "GULF OF OMAN", "place_bar": "GULF OF OMAN",
-        "headline": "UKMTO: a tanker was in an incident with military forces off Chabahar",
+        "headline": "UKMTO: tanker in incident with unnamed military forces off Iran",
         "body": "", "what": "",
         "sources": "UKMTO, Euronews",
         "tag": "STATED", "tag_extra": "",
@@ -242,7 +244,7 @@ STORIES = [
         "lon": 7.7, "lat": 45.1,
         "picture": "tennis", "label": "6-2 7-6",
     },
-    # ---- list briefs (14-36) ----
+    # ---- list briefs (14-35) ----
     {
         "n": 14, "region": "EUROPE", "field": "UKRAINE WAR",
         "topic": FIELD_TOPICS["UKRAINE WAR"],
@@ -269,8 +271,8 @@ STORIES = [
         "n": 16, "region": "EUROPE", "field": "UKRAINE WAR",
         "topic": FIELD_TOPICS["UKRAINE WAR"],
         "place": "Krasnodar", "place_bar": "Krasnodar",
-        "headline": "drones hit Rosgvardia HQ",
-        "body": "", "what": "drones hit Rosgvardia HQ",
+        "headline": "drones hit security HQ",
+        "body": "", "what": "drones hit security HQ",
         "sources": "Kyiv Post",
         "tag": "UNVERIFIED", "tag_extra": "",
         "lon": 38.98, "lat": 45.04,
@@ -280,8 +282,8 @@ STORIES = [
         "n": 17, "region": "EUROPE", "field": "UKRAINE WAR",
         "topic": FIELD_TOPICS["UKRAINE WAR"],
         "place": "Finland", "place_bar": "Finland",
-        "headline": "Russian ship towed away",
-        "body": "", "what": "Russian ship towed away",
+        "headline": "drone-hit ship towed away",
+        "body": "", "what": "drone-hit ship towed away",
         "sources": "Coastguard",
         "tag": "CONFIRMED", "tag_extra": "",
         "lon": 25.00, "lat": 60.00,
@@ -302,8 +304,8 @@ STORIES = [
         "n": 19, "region": "MIDDLE EAST", "field": "COALITION",
         "topic": FIELD_TOPICS["COALITION"],
         "place": "Israel", "place_bar": "Israel",
-        "headline": "unity-govt talks: no deal",
-        "body": "", "what": "unity-govt talks: no deal",
+        "headline": "unity-government talks: no deal",
+        "body": "", "what": "unity-government talks: no deal",
         "sources": "AJ, Ynet",
         "tag": "CONFIRMED", "tag_extra": "",
         "lon": 34.85, "lat": 32.08,
@@ -387,18 +389,7 @@ STORIES = [
         "picture": None, "label": None,
     },
     {
-        "n": 27, "region": "ASIA-PACIFIC", "field": "WEATHER",
-        "topic": FIELD_TOPICS["WEATHER"],
-        "place": "Fukushima", "place_bar": "Fukushima",
-        "headline": "snowbound guests leave",
-        "body": "", "what": "snowbound guests leave",
-        "sources": "Village",
-        "tag": "CONFIRMED", "tag_extra": "",
-        "lon": 140.07, "lat": 37.65,
-        "picture": None, "label": None,
-    },
-    {
-        "n": 28, "region": "ASIA-PACIFIC", "field": "PROTEST",
+        "n": 27, "region": "ASIA-PACIFIC", "field": "PROTEST",
         "topic": FIELD_TOPICS["PROTEST"],
         "place": "Bangladesh", "place_bar": "Bangladesh",
         "headline": "~30 homes torched in unrest",
@@ -409,29 +400,29 @@ STORIES = [
         "picture": None, "label": None,
     },
     {
-        "n": 29, "region": "ASIA-PACIFIC", "field": "DEFENCE",
+        "n": 28, "region": "ASIA-PACIFIC", "field": "DEFENCE",
         "topic": FIELD_TOPICS["DEFENCE"],
         "place": "Canberra", "place_bar": "Canberra",
-        "headline": "Marles slams CBO on AUKUS",
-        "body": "", "what": "Marles slams CBO on AUKUS",
+        "headline": "Marles hits back on AUKUS",
+        "body": "", "what": "Marles hits back on AUKUS",
         "sources": "Reuters",
         "tag": "STATED", "tag_extra": "",
         "lon": 149.13, "lat": -35.28,
         "picture": None, "label": None,
     },
     {
-        "n": 30, "region": "ASIA-PACIFIC", "field": "MARKETS",
+        "n": 29, "region": "ASIA-PACIFIC", "field": "MARKETS",
         "topic": FIELD_TOPICS["MARKETS"],
         "place": "China", "place_bar": "China",
-        "headline": "margin floor cut to 80%",
-        "body": "", "what": "margin floor cut to 80%",
+        "headline": "stock margin cut to 80%",
+        "body": "", "what": "stock margin cut to 80%",
         "sources": "3 exchanges",
         "tag": "CONFIRMED", "tag_extra": "",
         "lon": 121.47, "lat": 31.23,
         "picture": None, "label": None,
     },
     {
-        "n": 31, "region": "AMERICAS", "field": "MOTORSPORT",
+        "n": 30, "region": "AMERICAS", "field": "MOTORSPORT",
         "topic": FIELD_TOPICS["MOTORSPORT"],
         "place": "Las Vegas", "place_bar": "Las Vegas",
         "headline": "Verstappen wins the GP",
@@ -442,7 +433,7 @@ STORIES = [
         "picture": None, "label": None,
     },
     {
-        "n": 32, "region": "AMERICAS", "field": "TECH & SPEECH",
+        "n": 31, "region": "AMERICAS", "field": "TECH & SPEECH",
         "topic": FIELD_TOPICS["TECH & SPEECH"],
         "place": "Bogotá", "place_bar": "Bogotá",
         "headline": "govt asks X to suspend Petro",
@@ -453,7 +444,7 @@ STORIES = [
         "picture": None, "label": None,
     },
     {
-        "n": 33, "region": "AMERICAS", "field": "WEATHER",
+        "n": 32, "region": "AMERICAS", "field": "WEATHER",
         "topic": FIELD_TOPICS["WEATHER"],
         "place": "Brazil", "place_bar": "Brazil",
         "headline": "storm death toll rises to 5",
@@ -464,7 +455,7 @@ STORIES = [
         "picture": None, "label": None,
     },
     {
-        "n": 34, "region": "AMERICAS", "field": "EARTHQUAKE",
+        "n": 33, "region": "AMERICAS", "field": "EARTHQUAKE",
         "topic": FIELD_TOPICS["EARTHQUAKE"],
         "place": "Peru", "place_bar": "Peru",
         "headline": "M5.1 quake near Cerro de Pasco",
@@ -475,18 +466,18 @@ STORIES = [
         "picture": None, "label": None,
     },
     {
-        "n": 35, "region": "AMERICAS", "field": "HEALTH POLICY",
+        "n": 34, "region": "AMERICAS", "field": "HEALTH POLICY",
         "topic": FIELD_TOPICS["HEALTH POLICY"],
-        "place": "Washington", "place_bar": "Washington",
-        "headline": "El-Sayed: call it TrumpCare",
-        "body": "", "what": "El-Sayed: call it TrumpCare",
+        "place": "US", "place_bar": "US",
+        "headline": "senator-elect pitches ‘TrumpCare’",
+        "body": "", "what": "senator-elect pitches ‘TrumpCare’",
         "sources": "NBC",
         "tag": "STATED", "tag_extra": "",
         "lon": -77.04, "lat": 38.90,
         "picture": None, "label": None,
     },
     {
-        "n": 36, "region": "WORLD", "field": "CRYPTO",
+        "n": 35, "region": "WORLD", "field": "CRYPTO",
         "topic": FIELD_TOPICS["CRYPTO"],
         "place": "Markets", "place_bar": "Markets",
         "headline": "Bitcoin back above $60k",
@@ -500,13 +491,13 @@ STORIES = [
 
 LEADS = STORIES[0:3]
 CARDS = STORIES[3:13]
-BRIEFS = STORIES[13:36]
+BRIEFS = STORIES[13:35]
 
 N = len(STORIES)
 
 # ------------------------------------------------------------- top of page
-DECK = ("COP31 ends with no deal  ·  Russian strike kills 11 near Kyiv  ·  "
-        "Russian warship capsized at Benghazi")
+DECK = ("COP31 ends with no deal  ·  Russia fires 186 drones at Ukraine, "
+        "11 dead near Kyiv  ·  Russian warship capsized at Benghazi")
 
 BACKGROUND = ("US–Israel war with Iran since Feb 2026  ·  Russia’s war on "
               "Ukraine since 2022  ·  Gaza truce since Oct 2025  ·  "
@@ -529,8 +520,9 @@ TIMELINE = [
 # (lead, rest) pairs. Non-breaking spaces (\u00a0) keep "Sat 21" and
 # "Mon 23" from splitting across lines. {N} is filled by date_check_lines.
 DATE_CHECK = [
-    ("", "All {N} stories happened, or were first reported, on Sun 22 Nov (UTC)."),
-    ("Left out, Sat 21:", " Peru M6.7 quake and its toll, ‘El Chapo Isidro’ arrest, Bahrain strike."),
+    ("", "All {N} stories happened, or were first reported, on Sun 22 Nov (UTC); "
+         "leads chosen by lives lost and reach."),
+    ("Left out, Sat 21:", " Peru M6.7 quake and its toll, ‘El Chapo Isidro’ arrest, Bahrain strike."),
     ("Mon 23:", " 49ers–Vikings (kick-off 01:20 UTC)."),
 ]
 
@@ -567,7 +559,7 @@ def topic_totals():
 
 
 def story_by_number(n):
-    """Return the story dict with number n (1-36), or None."""
+    """Return the story dict with number n (1-35), or None."""
     for story in STORIES:
         if story["n"] == n:
             return story

@@ -1,5 +1,5 @@
 # map_draw.py — the world map for "The World in One Day", 22 Nov 2026.
-# One-page newspaper, 36 stories, 1024x1024. Draws the map box, the
+# One-page newspaper, 35 stories, 1024x1024. Draws the map box, the
 # numbered pins for stories 1-13, the list dots for stories 14-36, the
 # map key and the region key (spec section 8, icon guide section 4).
 # All coordinates / sizes are in final 1024-px page units. H.* helpers
@@ -31,7 +31,7 @@ _BADGE_SIZE = 9.2
 _DOT_R = 2.8
 _TRUE_DOT_R = 1.6
 _LON_MIN, _LON_MAX = -126.0, 180.0
-_LAT_TOP, _LAT_BOTTOM = 66.0, -48.0
+_LAT_TOP, _LAT_BOTTOM = 62.0, -42.0
 
 
 def load_land(path):
@@ -62,7 +62,7 @@ def load_land(path):
 def lonlat_to_xy(lon, lat, box):
     """Equirectangular projection into box=(x0, y0, x1, y1), page units.
 
-    lon -126..180 maps to x0..x1, lat 66 (top)..-48 (bottom) maps to
+    lon -126..180 maps to x0..x1, lat 62 (top)..-42 (bottom) maps to
     y0..y1. Scale is (x1 - x0) / 306 px per degree on both axes.
     """
     x0, y0, x1, y1 = box
@@ -152,7 +152,7 @@ def draw_map(img, box, land, stories):
             true_pt[story["n"]] = lonlat_to_xy(story["lon"], story["lat"],
                                                box)
 
-    # (5) List dots: stories 14-36 with coordinates, region colour,
+    # (5) List dots: stories 14-35 with coordinates, region colour,
     # white 0.7-px outline.
     for story in stories:
         if story["n"] >= 14 and story["lon"] is not None \
